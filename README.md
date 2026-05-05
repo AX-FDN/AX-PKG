@@ -6,6 +6,7 @@ This repository is a package monorepo. Each package lives under `packages/<name>
 
 ```text
 packages/
+  api_tools/
   auth_tools/
   bytes_tools/
   cache_tools/
@@ -19,15 +20,18 @@ packages/
   text_tools/
   config_rules/
   math_rules/
+  migration_tools/
   http_tools/
   url_tools/
   net_tools/
   number_tools/
   pagination_tools/
+  queue_tools/
   markdown_tools/
   report_tools/
   result_tools/
   retry_tools/
+  schema_tools/
   validation_tools/
 ```
 
@@ -37,6 +41,7 @@ The AX compiler repository stores registry metadata, while this repository store
 
 | Package | Modules | Purpose |
 | --- | --- | --- |
+| `api_tools` | `api_tools.response` | API response envelope, status, and request metadata helpers |
 | `auth_tools` | `auth_tools.headers` | Bearer/API-key header helpers and safe secret redaction |
 | `bytes_tools` | `bytes_tools.core` | Byte-buffer helpers over `std.bytes` for backend-oriented packages |
 | `cache_tools` | `cache_tools.keys` | Cache key and freshness policy helpers |
@@ -56,9 +61,12 @@ The AX compiler repository stores registry metadata, while this repository store
 | `number_tools` | `number_tools.core` | Integer clamps, percentages, and range checks |
 | `pagination_tools` | `pagination_tools.core` | Page, offset, and window helpers |
 | `markdown_tools` | `markdown_tools.headings` | Markdown heading inspection helpers |
+| `migration_tools` | `migration_tools.plan` | Migration naming, batch status, and rollback helpers |
 | `report_tools` | `report_tools.builder` | Plain-text report construction helpers |
+| `queue_tools` | `queue_tools.jobs` | Queue job status, retry, and dead-letter helpers |
 | `result_tools` | `result_tools.summary` | Helpers around `std.result.Result<i32, string>` |
 | `retry_tools` | `retry_tools.policy` | Retry classification and delay policy helpers |
+| `schema_tools` | `schema_tools.describe` | Schema field and table description helpers |
 | `validation_tools` | `validation_tools.rules` | Reusable validation predicates and status messages |
 
 ## Validate Locally

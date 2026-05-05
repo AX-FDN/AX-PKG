@@ -1,0 +1,51 @@
+module migration_tools.plan;
+
+struct MigrationStep {
+    name: string,
+    reversible: bool,
+    destructive: bool,
+}
+
+struct MigrationBatch {
+    label: string,
+    pending: i32,
+    destructive: i32,
+}
+
+fn step(name: string, reversible: bool, destructive: bool) -> MigrationStep {
+    return MigrationStep { name: name, reversible: reversible, destructive: destructive };
+}
+
+fn batch(label: string, pending: i32, destructive: i32) -> MigrationBatch {
+    return MigrationBatch { label: label, pending: pending, destructive: destructive };
+}
+
+fn normalize_name(name: string) -> string {
+    return string_replace(string_trim(name), " ", "_");
+}
+
+fn is_valid_name(name: string) -> bool {
+    let normalized: string = normalize_name(name);
+    return string_len(normalized) > 0 && !string_contains(normalized, "/") && !string_contains(normalized, "\\");
+}
+
+fn batch_status(batch: MigrationBatch) -> string {
+    if (batch.pending == 0) {
+        return "clean";
+    }
+    if (batch.destructive > 0) {
+        return "requires-review";
+    }
+    return "ready";
+}
+
+fn rollback_label(step: MigrationStep) -> string {
+    if (!step.reversible) {
+        return step.name + ": no rollback";
+    }
+    if (step.destructive) {
+        return step.name + ": guarded rollback";
+    }
+    return step.name + ": rollback ready";
+}
+

@@ -1,0 +1,61 @@
+module schema_tools.describe;
+
+struct FieldSpec {
+    name: string,
+    ty: string,
+    nullable: bool,
+    indexed: bool,
+}
+
+struct TableSummary {
+    name: string,
+    fields: i32,
+    indexes: i32,
+}
+
+fn field(name: string, ty: string, nullable: bool, indexed: bool) -> FieldSpec {
+    return FieldSpec { name: name, ty: ty, nullable: nullable, indexed: indexed };
+}
+
+fn table(name: string, fields: i32, indexes: i32) -> TableSummary {
+    return TableSummary { name: name, fields: fields, indexes: indexes };
+}
+
+fn field_label(field: FieldSpec) -> string {
+    let mut label: string = field.name + ":" + field.ty;
+    if (field.nullable) {
+        label = label + "?";
+    }
+    if (field.indexed) {
+        label = label + "#";
+    }
+    return label;
+}
+
+fn is_scalar_type(ty: string) -> bool {
+    return ty == "i32" || ty == "string" || ty == "bool" || ty == "f32";
+}
+
+fn is_compatible_change(old_field: FieldSpec, new_field: FieldSpec) -> bool {
+    if (old_field.name != new_field.name) {
+        return false;
+    }
+    if (old_field.ty != new_field.ty) {
+        return false;
+    }
+    if (old_field.nullable && !new_field.nullable) {
+        return false;
+    }
+    return true;
+}
+
+fn table_health(table: TableSummary) -> string {
+    if (table.fields <= 0) {
+        return "empty";
+    }
+    if (table.indexes == 0) {
+        return "needs-index-review";
+    }
+    return "ok";
+}
+

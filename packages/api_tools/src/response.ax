@@ -1,0 +1,68 @@
+module api_tools.response;
+
+import json_tools.encode;
+
+struct ApiStatus {
+    ok: bool,
+    code: string,
+    message: string,
+}
+
+struct RequestMeta {
+    request_id: string,
+    trace_id: string,
+    route: string,
+}
+
+fn ok(message: string) -> ApiStatus {
+    return ApiStatus { ok: true, code: "ok", message: message };
+}
+
+fn error(code: string, message: string) -> ApiStatus {
+    return ApiStatus { ok: false, code: code, message: message };
+}
+
+fn request_meta(request_id: string, trace_id: string, route: string) -> RequestMeta {
+    return RequestMeta { request_id: request_id, trace_id: trace_id, route: route };
+}
+
+fn http_status(status: ApiStatus) -> i32 {
+    if (status.ok) {
+        return 200;
+    }
+    if (status.code == "not_found") {
+        return 404;
+    }
+    if (status.code == "invalid") {
+        return 400;
+    }
+    if (status.code == "unauthorized") {
+        return 401;
+    }
+    return 500;
+}
+
+fn status_label(status: ApiStatus) -> string {
+    if (status.ok) {
+        return "ok:" + status.message;
+    }
+    return "err:" + status.code + ":" + status.message;
+}
+
+fn envelope(status: ApiStatus, data_json: string) -> string {
+    return json_tools.encode.object3(
+        json_tools.encode.field_bool("ok", status.ok),
+        json_tools.encode.field_string("code", status.code),
+        json_tools.encode.field_string("data", data_json)
+    );
+}
+
+fn error_envelope(code: string, message: string) -> string {
+    let status: ApiStatus = error(code, message);
+    return json_tools.encode.object3(
+        json_tools.encode.field_bool("ok", status.ok),
+        json_tools.encode.field_string("code", status.code),
+        json_tools.encode.field_string("message", status.message)
+    );
+}
+

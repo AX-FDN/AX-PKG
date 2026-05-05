@@ -6,6 +6,7 @@ entry = "src/main.ax"
 sources = ["../../../AX/std"]
 
 [dependencies]
+api_tools = { path = "../../packages/api_tools" }
 auth_tools = { path = "../../packages/auth_tools" }
 bytes_tools = { path = "../../packages/bytes_tools" }
 cache_tools = { path = "../../packages/cache_tools" }
@@ -19,11 +20,14 @@ jwt_tools = { path = "../../packages/jwt_tools" }
 log_tools = { path = "../../packages/log_tools" }
 markdown_tools = { path = "../../packages/markdown_tools" }
 math_rules = { path = "../../packages/math_rules" }
+migration_tools = { path = "../../packages/migration_tools" }
 number_tools = { path = "../../packages/number_tools" }
 pagination_tools = { path = "../../packages/pagination_tools" }
+queue_tools = { path = "../../packages/queue_tools" }
 report_tools = { path = "../../packages/report_tools" }
 result_tools = { path = "../../packages/result_tools" }
 retry_tools = { path = "../../packages/retry_tools" }
+schema_tools = { path = "../../packages/schema_tools" }
 text_tools = { path = "../../packages/text_tools" }
 url_tools = { path = "../../packages/url_tools" }
 validation_tools = { path = "../../packages/validation_tools" }

@@ -1,0 +1,49 @@
+module queue_tools.jobs;
+
+import retry_tools.policy;
+
+struct JobState {
+    status: string,
+    attempts: i32,
+    max_attempts: i32,
+}
+
+fn pending(max_attempts: i32) -> JobState {
+    return JobState { status: "pending", attempts: 0, max_attempts: max_attempts };
+}
+
+fn running(attempts: i32, max_attempts: i32) -> JobState {
+    return JobState { status: "running", attempts: attempts, max_attempts: max_attempts };
+}
+
+fn succeeded(attempts: i32, max_attempts: i32) -> JobState {
+    return JobState { status: "succeeded", attempts: attempts, max_attempts: max_attempts };
+}
+
+fn failed(attempts: i32, max_attempts: i32) -> JobState {
+    return JobState { status: "failed", attempts: attempts, max_attempts: max_attempts };
+}
+
+fn can_retry(job: JobState) -> bool {
+    return job.status == "failed" && job.attempts < job.max_attempts;
+}
+
+fn is_terminal(job: JobState) -> bool {
+    return job.status == "succeeded" || (job.status == "failed" && !can_retry(job));
+}
+
+fn next_delay_ms(job: JobState, base_delay_ms: i32, max_delay_ms: i32) -> i32 {
+    let retry_policy: retry_tools.policy.RetryPolicy = retry_tools.policy.exponential(job.max_attempts, base_delay_ms, max_delay_ms);
+    return retry_tools.policy.delay_for_attempt(job.attempts + 1, retry_policy);
+}
+
+fn dead_letter_reason(job: JobState) -> string {
+    if (job.status != "failed") {
+        return "not-failed";
+    }
+    if (can_retry(job)) {
+        return "retryable";
+    }
+    return "attempts-exhausted";
+}
+
