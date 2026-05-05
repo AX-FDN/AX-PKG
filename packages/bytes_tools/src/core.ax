@@ -1,0 +1,42 @@
+module bytes_tools.core;
+
+import std.bytes;
+
+fn utf8_hex(text: string) -> string {
+    return std.bytes.to_hex(std.bytes.from_string(text));
+}
+
+fn append_ascii(data: bytes, value: i32) -> bytes {
+    return std.bytes.push(data, value);
+}
+
+fn append_ascii_text(text: string, value: i32) -> string {
+    return std.bytes.to_string_lossy(append_ascii(std.bytes.from_string(text), value));
+}
+
+fn first_or(data: bytes, fallback: i32) -> i32 {
+    if (std.bytes.length(data) == 0) {
+        return fallback;
+    }
+    return std.bytes.get(data, 0);
+}
+
+fn first_or_text(text: string, fallback: i32) -> i32 {
+    return first_or(std.bytes.from_string(text), fallback);
+}
+
+fn is_empty(data: bytes) -> bool {
+    return std.bytes.length(data) == 0;
+}
+
+fn has_first_ascii(data: bytes, value: i32) -> bool {
+    if (std.bytes.length(data) == 0) {
+        return false;
+    }
+    return std.bytes.get(data, 0) == value;
+}
+
+fn has_first_ascii_text(text: string, value: i32) -> bool {
+    return has_first_ascii(std.bytes.from_string(text), value);
+}
+

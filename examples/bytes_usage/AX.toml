@@ -1,0 +1,10 @@
+manifest_version = 1
+
+[package]
+name = "ax_pkg_bytes_usage"
+entry = "src/main.ax"
+sources = ["../../../AX/std"]
+
+[dependencies]
+bytes_tools = { path = "../../packages/bytes_tools" }
+

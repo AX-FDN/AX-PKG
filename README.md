@@ -7,6 +7,7 @@ This repository is a package monorepo. Each package lives under `packages/<name>
 ```text
 packages/
   auth_tools/
+  bytes_tools/
   collection_tools/
   database_tools/
   json_tools/
@@ -31,6 +32,7 @@ The AX compiler repository stores registry metadata, while this repository store
 | Package | Modules | Purpose |
 | --- | --- | --- |
 | `auth_tools` | `auth_tools.headers` | Bearer/API-key header helpers and safe secret redaction |
+| `bytes_tools` | `bytes_tools.core` | Byte-buffer helpers over `std.bytes` for backend-oriented packages |
 | `collection_tools` | `collection_tools.ints` | Integer slice summaries and aggregates |
 | `database_tools` | `database_tools.dsn` | Pure AX DSN classification and database readiness helpers |
 | `json_tools` | `json_tools.encode` | Deterministic JSON string construction helpers |
@@ -54,6 +56,8 @@ From the AX compiler repository, run:
 ```powershell
 D:\CargoTarget\AX\debug\axc.exe check ..\AX-PKG\examples\basic_usage
 D:\CargoTarget\AX\debug\axc.exe run ..\AX-PKG\examples\basic_usage
+D:\CargoTarget\AX\debug\axc.exe check ..\AX-PKG\examples\bytes_usage
+D:\CargoTarget\AX\debug\axc.exe run ..\AX-PKG\examples\bytes_usage
 ```
 
 To compute a registry checksum for a package:

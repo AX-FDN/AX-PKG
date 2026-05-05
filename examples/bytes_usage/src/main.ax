@@ -1,0 +1,13 @@
+import bytes_tools.core;
+import std.bytes;
+
+fn main() -> i32 {
+    let data: bytes = std.bytes.from_string("AX");
+    let more: bytes = bytes_tools.core.append_ascii(data, 33);
+    println(std.bytes.to_hex(more));
+    println(std.bytes.to_string_lossy(more));
+    println(to_string(bytes_tools.core.first_or(more, 0)));
+    println(to_string(bytes_tools.core.has_first_ascii_text("AX", 65)));
+    return std.bytes.length(more);
+}
+
