@@ -1,0 +1,12 @@
+manifest_version = 1
+
+[package]
+name = "ax_pkg_basic_usage"
+entry = "src/main.ax"
+
+[dependencies]
+config_rules = { path = "../../packages/config_rules" }
+math_rules = { path = "../../packages/math_rules" }
+result_tools = { path = "../../packages/result_tools" }
+text_tools = { path = "../../packages/text_tools" }
+

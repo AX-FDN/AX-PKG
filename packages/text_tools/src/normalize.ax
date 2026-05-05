@@ -1,0 +1,30 @@
+module text_tools.normalize;
+
+fn expand_tabs(text: string) -> string {
+    return string_replace(text, "\t", "    ");
+}
+
+fn trim_outer(text: string) -> string {
+    return string_trim(text);
+}
+
+fn ensure_trailing_newline(text: string) -> string {
+    if (string_ends_with(text, "\n")) {
+        return text;
+    }
+    return text + "\n";
+}
+
+fn normalize_line(text: string) -> string {
+    return string_trim(expand_tabs(text));
+}
+
+fn normalize_document(text: string) -> string {
+    let lines: [string] = string_split_lines(expand_tabs(text));
+    let mut output: string = "";
+    for (let mut i: i32 = 0; i < len(lines); i = i + 1) {
+        output = output + string_trim(lines[i]) + "\n";
+    }
+    return ensure_trailing_newline(output);
+}
+

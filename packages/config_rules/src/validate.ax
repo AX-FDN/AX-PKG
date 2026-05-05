@@ -1,0 +1,60 @@
+module config_rules.validate;
+
+fn require_field(contents: string, name: string) -> i32 {
+    if (string_contains(contents, name + "=")) {
+        return 0;
+    }
+    return 1;
+}
+
+fn reject_empty_value(contents: string, name: string) -> i32 {
+    if (string_contains(contents, name + "=\n")) {
+        return 1;
+    }
+    return 0;
+}
+
+fn reject_zero_port(contents: string) -> i32 {
+    if (string_contains(contents, "port=0")) {
+        return 1;
+    }
+    return 0;
+}
+
+fn validate(contents: string) -> i32 {
+    if (require_field(contents, "host") != 0) {
+        return 1;
+    }
+    if (require_field(contents, "port") != 0) {
+        return 1;
+    }
+    if (reject_empty_value(contents, "host") != 0) {
+        return 1;
+    }
+    if (reject_empty_value(contents, "port") != 0) {
+        return 1;
+    }
+    if (reject_zero_port(contents) != 0) {
+        return 1;
+    }
+    return 0;
+}
+
+fn validation_message(contents: string) -> string {
+    if (require_field(contents, "host") != 0) {
+        return "missing field: host";
+    }
+    if (require_field(contents, "port") != 0) {
+        return "missing field: port";
+    }
+    if (reject_empty_value(contents, "host") != 0) {
+        return "empty field: host";
+    }
+    if (reject_empty_value(contents, "port") != 0) {
+        return "empty field: port";
+    }
+    if (reject_zero_port(contents) != 0) {
+        return "invalid field: port must not be zero";
+    }
+    return "ok";
+}

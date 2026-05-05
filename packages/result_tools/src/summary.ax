@@ -1,0 +1,22 @@
+module result_tools.summary;
+
+fn status_label(code: i32, message: string) -> string {
+    if (code == 0) {
+        return "ok";
+    }
+    return "err:" + message;
+}
+
+fn exit_code(code: i32) -> i32 {
+    if (code == 0) {
+        return 0;
+    }
+    return 1;
+}
+
+fn add_context(message: string, context: string) -> string {
+    if (string_len(message) == 0) {
+        return context;
+    }
+    return context + ": " + message;
+}

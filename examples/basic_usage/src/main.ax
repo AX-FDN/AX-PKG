@@ -1,0 +1,17 @@
+import config_rules.validate;
+import math_rules.core;
+import result_tools.summary;
+import text_tools.normalize;
+import text_tools.stats;
+
+fn main() -> i32 {
+    let normalized: string = text_tools.normalize.normalize_document("# Title\n\n\tbody");
+    let summary: text_tools.stats.TextSummary = text_tools.stats.analyze(normalized);
+    let score: i32 = math_rules.core.score(summary.nonempty);
+    let config_status: i32 = config_rules.validate.validate("host=localhost\nport=8080\n");
+    let message: string = config_rules.validate.validation_message("host=localhost\nport=8080\n");
+    let labeled: string = result_tools.summary.status_label(config_status, message);
+    println(labeled);
+    println("score=" + to_string(score));
+    return result_tools.summary.exit_code(config_status);
+}

@@ -1,0 +1,32 @@
+module text_tools.stats;
+
+struct TextSummary {
+    lines: i32,
+    nonempty: i32,
+    headings: i32,
+}
+
+fn empty_summary() -> TextSummary {
+    return TextSummary { lines: 0, nonempty: 0, headings: 0 };
+}
+
+fn analyze(text: string) -> TextSummary {
+    let lines: [string] = string_split_lines(text);
+    let mut summary: TextSummary = empty_summary();
+    for (let mut i: i32 = 0; i < len(lines); i = i + 1) {
+        let line: string = string_trim(lines[i]);
+        summary.lines = summary.lines + 1;
+        if (string_len(line) != 0) {
+            summary.nonempty = summary.nonempty + 1;
+        }
+        if (string_starts_with(line, "#")) {
+            summary.headings = summary.headings + 1;
+        }
+    }
+    return summary;
+}
+
+fn summary_score(summary: TextSummary) -> i32 {
+    return summary.nonempty + summary.headings;
+}
+
