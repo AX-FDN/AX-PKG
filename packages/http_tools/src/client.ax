@@ -1,0 +1,26 @@
+module http_tools.client;
+
+import std.http;
+import std.result;
+
+fn get_text(url: string) -> std.result.Result<string, string> {
+    let response: std.http.HttpResponse = std.http.get(url);
+    if (response.ok) {
+        return std.result.Result.ok(response.body);
+    }
+    return std.result.Result.err(response.body);
+}
+
+fn get_status(url: string) -> i32 {
+    let response: std.http.HttpResponse = std.http.get(url);
+    return response.status;
+}
+
+fn is_success_status(status: i32) -> bool {
+    return status >= 200 && status <= 299;
+}
+
+fn status_label(url: string) -> string {
+    let response: std.http.HttpResponse = std.http.get(url);
+    return std.http.status_text(response);
+}

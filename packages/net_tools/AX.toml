@@ -1,0 +1,5 @@
+manifest_version = 1
+
+[package]
+name = "net_tools"
+sources = ["src"]

@@ -1,0 +1,70 @@
+module database_tools.dsn;
+
+struct DsnCheck {
+    ok: bool,
+    driver: string,
+    message: string,
+}
+
+fn driver_name(dsn: string) -> string {
+    if (string_starts_with(dsn, "postgres://")) {
+        return "postgres";
+    }
+    if (string_starts_with(dsn, "postgresql://")) {
+        return "postgres";
+    }
+    if (string_starts_with(dsn, "mysql://")) {
+        return "mysql";
+    }
+    if (string_starts_with(dsn, "redis://")) {
+        return "redis";
+    }
+    if (string_starts_with(dsn, "sqlite://")) {
+        return "sqlite";
+    }
+    return "unknown";
+}
+
+fn is_supported_driver(driver: string) -> bool {
+    return driver == "postgres" || driver == "mysql" || driver == "redis" || driver == "sqlite";
+}
+
+fn has_authority(dsn: string) -> bool {
+    return string_contains(dsn, "://") && string_contains(dsn, ".");
+}
+
+fn requires_network(driver: string) -> bool {
+    return driver == "postgres" || driver == "mysql" || driver == "redis";
+}
+
+fn requires_tls_runtime(driver: string) -> bool {
+    return driver == "postgres" || driver == "mysql";
+}
+
+fn check(dsn: string) -> DsnCheck {
+    if (string_len(dsn) == 0) {
+        return DsnCheck { ok: false, driver: "unknown", message: "dsn must not be empty" };
+    }
+    let driver: string = driver_name(dsn);
+    if (!is_supported_driver(driver)) {
+        return DsnCheck { ok: false, driver: driver, message: "unsupported database driver" };
+    }
+    if (requires_network(driver) && !has_authority(dsn)) {
+        return DsnCheck { ok: false, driver: driver, message: "network database dsn should include a host" };
+    }
+    return DsnCheck { ok: true, driver: driver, message: "ok" };
+}
+
+fn readiness_note(dsn: string) -> string {
+    let checked: DsnCheck = check(dsn);
+    if (!checked.ok) {
+        return checked.message;
+    }
+    if (requires_tls_runtime(checked.driver)) {
+        return checked.driver + " needs TCP plus TLS runtime ABI before real database IO";
+    }
+    if (checked.driver == "redis") {
+        return "redis can start with std.net text protocol experiments";
+    }
+    return "sqlite needs file/runtime or native extension ABI before real database IO";
+}

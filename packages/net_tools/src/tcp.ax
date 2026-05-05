@@ -1,0 +1,30 @@
+module net_tools.tcp;
+
+import std.net;
+import std.result;
+
+fn is_valid_port(port: i32) -> bool {
+    return port >= 1 && port <= 65535;
+}
+
+fn endpoint(host: string, port: i32) -> string {
+    return host + ":" + to_string(port);
+}
+
+fn exchange(host: string, port: i32, request: string) -> std.result.Result<string, string> {
+    if (string_len(host) == 0) {
+        return std.result.Result.err("host must not be empty");
+    }
+    if (!is_valid_port(port)) {
+        return std.result.Result.err("port must be between 1 and 65535");
+    }
+    return std.net.try_tcp_exchange(host, port, request);
+}
+
+fn exchange_status(host: string, port: i32, request: string) -> string {
+    let response: std.net.TcpResponse = std.net.tcp_exchange(host, port, request);
+    if (response.ok) {
+        return "ok:" + endpoint(host, port);
+    }
+    return "err:" + response.error;
+}

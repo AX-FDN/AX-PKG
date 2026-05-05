@@ -7,9 +7,12 @@ This repository is a package monorepo. Each package lives under `packages/<name>
 ```text
 packages/
   collection_tools/
+  database_tools/
   text_tools/
   config_rules/
   math_rules/
+  http_tools/
+  net_tools/
   number_tools/
   markdown_tools/
   report_tools/
@@ -24,9 +27,12 @@ The AX compiler repository stores registry metadata, while this repository store
 | Package | Modules | Purpose |
 | --- | --- | --- |
 | `collection_tools` | `collection_tools.ints` | Integer slice summaries and aggregates |
+| `database_tools` | `database_tools.dsn` | Pure AX DSN classification and database readiness helpers |
 | `text_tools` | `text_tools.normalize`, `text_tools.stats` | Text normalization and simple text metrics |
 | `config_rules` | `config_rules.validate` | Key-value config validation helpers |
 | `math_rules` | `math_rules.core` | Small integer scoring helpers |
+| `http_tools` | `http_tools.client` | Interpreter-backed plain HTTP GET helpers over `std.http` |
+| `net_tools` | `net_tools.tcp` | Interpreter-backed one-shot TCP helpers over `std.net` |
 | `number_tools` | `number_tools.core` | Integer clamps, percentages, and range checks |
 | `markdown_tools` | `markdown_tools.headings` | Markdown heading inspection helpers |
 | `report_tools` | `report_tools.builder` | Plain-text report construction helpers |

@@ -102,8 +102,12 @@ axc pkg hash packages\your_package
 - Do not add install scripts.
 - Do not depend on private files outside the package directory.
 - Keep module roots aligned with the dependency alias.
-- Prefer pure AX code first; host/runtime-heavy packages such as HTTP should wait until the runtime ABI is ready.
-- Add an example project when adding a new package.
+- Prefer pure AX code first. Host/runtime packages may wrap explicit `std.*`
+  host APIs, but they must document interpreter/AOT boundaries.
+- Add an example project when adding a normal pure AX package.
+- Host-boundary packages such as `http_tools` or `net_tools` may use a dedicated
+  host smoke instead of the generic `examples/basic_usage` project, because
+  they require the AX standard library source root and local services.
 
 ## Recommended First Package Types
 
@@ -115,10 +119,20 @@ For AX 0.2 Package Preview, prefer packages that can be validated by `axc check`
 - Report builders.
 - Markdown/document inspectors.
 - Small collection helpers.
+- Pure database connection-string and readiness helpers.
 
-Avoid package types that need native runtime or network support until the compiler/runtime boundary is ready:
+Host-boundary preview packages are now acceptable when they wrap explicit
+standard-library host APIs:
 
-- HTTP clients.
+- HTTP helpers over `std.http`.
+- One-shot TCP helpers over `std.net`.
+- Database protocol helpers that stay pure AX until TCP/TLS/byte buffers are
+  ready.
+
+HTTP and raw TCP preview packages can now wrap `std.http` and `std.net`, but
+they are interpreter-first packages until native runtime ABI support exists.
+Avoid claiming mature native support for:
+
 - Database drivers.
 - Native extensions.
 - Packages that shell out to external tools.

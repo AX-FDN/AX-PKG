@@ -7,6 +7,7 @@ entry = "src/main.ax"
 [dependencies]
 collection_tools = { path = "../../packages/collection_tools" }
 config_rules = { path = "../../packages/config_rules" }
+database_tools = { path = "../../packages/database_tools" }
 markdown_tools = { path = "../../packages/markdown_tools" }
 math_rules = { path = "../../packages/math_rules" }
 number_tools = { path = "../../packages/number_tools" }
