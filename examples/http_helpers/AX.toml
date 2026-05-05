@@ -1,0 +1,10 @@
+manifest_version = 1
+
+[package]
+name = "ax_pkg_http_helpers"
+entry = "src/main.ax"
+sources = ["../../../AX/std"]
+
+[dependencies]
+http_tools = { path = "../../packages/http_tools" }
+

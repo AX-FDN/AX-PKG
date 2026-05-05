@@ -86,6 +86,8 @@ D:\CargoTarget\AX\debug\axc.exe check ..\AX-PKG\examples\basic_usage
 D:\CargoTarget\AX\debug\axc.exe run ..\AX-PKG\examples\basic_usage
 D:\CargoTarget\AX\debug\axc.exe check ..\AX-PKG\examples\bytes_usage
 D:\CargoTarget\AX\debug\axc.exe run ..\AX-PKG\examples\bytes_usage
+D:\CargoTarget\AX\debug\axc.exe check ..\AX-PKG\examples\http_helpers
+D:\CargoTarget\AX\debug\axc.exe run ..\AX-PKG\examples\http_helpers
 ```
 
 To compute a registry checksum for a package:

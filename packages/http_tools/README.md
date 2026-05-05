@@ -8,6 +8,8 @@ interpreter-first host runtime capability.
 
 Current boundary:
 
+- Pure request/status/header helpers are thin wrappers over `std.http` and do
+  not perform network I/O.
 - Plain `http://` GET only through `std.http`.
 - No HTTPS/TLS yet.
 - No POST, custom headers, redirects, streaming, or binary bodies yet.

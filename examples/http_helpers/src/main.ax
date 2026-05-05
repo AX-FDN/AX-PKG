@@ -1,0 +1,14 @@
+import http_tools.client;
+
+fn main() -> i32 {
+    let query: string = http_tools.client.query_pair("page", "1");
+    let url: string = http_tools.client.append_query("/v1/items", query);
+    println(to_string(http_tools.client.is_success_status(204)));
+    println(to_string(http_tools.client.is_retryable_status(503)));
+    println(http_tools.client.status_class(404));
+    println(url);
+    println(http_tools.client.append_query("/v1/items?tag=ax", query));
+    println(http_tools.client.request_key("GET", url));
+    println(http_tools.client.accept_json_header());
+    return 0;
+}
