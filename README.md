@@ -13,7 +13,9 @@ packages/
   collection_tools/
   database_tools/
   encoding_tools/
+  feature_flag_tools/
   hash_tools/
+  health_tools/
   json_tools/
   jwt_tools/
   log_tools/
@@ -25,8 +27,10 @@ packages/
   url_tools/
   net_tools/
   number_tools/
+  observability_tools/
   pagination_tools/
   queue_tools/
+  rate_limit_tools/
   markdown_tools/
   report_tools/
   result_tools/
@@ -48,7 +52,9 @@ The AX compiler repository stores registry metadata, while this repository store
 | `collection_tools` | `collection_tools.ints` | Integer slice summaries and aggregates |
 | `database_tools` | `database_tools.dsn` | Pure AX DSN classification and database readiness helpers |
 | `encoding_tools` | `encoding_tools.core` | Hex and base64 helpers over `std.bytes` |
+| `feature_flag_tools` | `feature_flag_tools.flags` | Feature flag rollout and decision helpers |
 | `hash_tools` | `hash_tools.checksum` | Non-cryptographic deterministic checksum helpers |
+| `health_tools` | `health_tools.checks` | Service readiness and dependency health helpers |
 | `json_tools` | `json_tools.encode` | Deterministic JSON string construction helpers |
 | `jwt_tools` | `jwt_tools.preview` | Unsigned JWT shape helpers for package experiments |
 | `log_tools` | `log_tools.core` | Structured log line formatting helpers |
@@ -59,11 +65,13 @@ The AX compiler repository stores registry metadata, while this repository store
 | `net_tools` | `net_tools.tcp` | Interpreter-backed one-shot TCP helpers over `std.net` |
 | `url_tools` | `url_tools.core` | URL classification and query construction helpers |
 | `number_tools` | `number_tools.core` | Integer clamps, percentages, and range checks |
+| `observability_tools` | `observability_tools.signals` | Metric, span, and latency signal helpers |
 | `pagination_tools` | `pagination_tools.core` | Page, offset, and window helpers |
 | `markdown_tools` | `markdown_tools.headings` | Markdown heading inspection helpers |
 | `migration_tools` | `migration_tools.plan` | Migration naming, batch status, and rollback helpers |
 | `report_tools` | `report_tools.builder` | Plain-text report construction helpers |
 | `queue_tools` | `queue_tools.jobs` | Queue job status, retry, and dead-letter helpers |
+| `rate_limit_tools` | `rate_limit_tools.window` | Rate-limit quota and window helpers |
 | `result_tools` | `result_tools.summary` | Helpers around `std.result.Result<i32, string>` |
 | `retry_tools` | `retry_tools.policy` | Retry classification and delay policy helpers |
 | `schema_tools` | `schema_tools.describe` | Schema field and table description helpers |

@@ -1,0 +1,44 @@
+module rate_limit_tools.window;
+
+struct RateLimit {
+    limit: i32,
+    used: i32,
+    reset_seconds: i32,
+}
+
+fn create(limit: i32, used: i32, reset_seconds: i32) -> RateLimit {
+    return RateLimit { limit: limit, used: used, reset_seconds: reset_seconds };
+}
+
+fn remaining(limit: RateLimit) -> i32 {
+    if (limit.used >= limit.limit) {
+        return 0;
+    }
+    return limit.limit - limit.used;
+}
+
+fn allowed(limit: RateLimit) -> bool {
+    return remaining(limit) > 0;
+}
+
+fn usage_percent(limit: RateLimit) -> i32 {
+    if (limit.limit <= 0) {
+        return 100;
+    }
+    return (limit.used * 100) / limit.limit;
+}
+
+fn status(limit: RateLimit) -> string {
+    if (!allowed(limit)) {
+        return "limited";
+    }
+    if (usage_percent(limit) >= 80) {
+        return "near-limit";
+    }
+    return "ok";
+}
+
+fn header_value(limit: RateLimit) -> string {
+    return "limit=" + to_string(limit.limit) + "; remaining=" + to_string(remaining(limit)) + "; reset=" + to_string(limit.reset_seconds);
+}
+

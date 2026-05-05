@@ -1,0 +1,53 @@
+module feature_flag_tools.flags;
+
+import std.bytes;
+
+struct FeatureFlag {
+    name: string,
+    enabled: bool,
+    rollout_percent: i32,
+}
+
+fn flag(name: string, enabled: bool, rollout_percent: i32) -> FeatureFlag {
+    return FeatureFlag { name: name, enabled: enabled, rollout_percent: rollout_percent };
+}
+
+fn clamp_percent(value: i32) -> i32 {
+    if (value < 0) {
+        return 0;
+    }
+    if (value > 100) {
+        return 100;
+    }
+    return value;
+}
+
+fn bucket(key: string) -> i32 {
+    let data: bytes = std.bytes.from_string(key);
+    let mut value: i32 = 0;
+    for (let mut i: i32 = 0; i < std.bytes.length(data); i = i + 1) {
+        value = (value + std.bytes.get(data, i)) % 100;
+    }
+    return value;
+}
+
+fn enabled_for(flag: FeatureFlag, user_key: string) -> bool {
+    if (!flag.enabled) {
+        return false;
+    }
+    return bucket(flag.name + ":" + user_key) < clamp_percent(flag.rollout_percent);
+}
+
+fn decision_label(flag: FeatureFlag, user_key: string) -> string {
+    if (enabled_for(flag, user_key)) {
+        return "enabled";
+    }
+    return "disabled";
+}
+
+fn rollout_label(flag: FeatureFlag) -> string {
+    if (!flag.enabled) {
+        return flag.name + ":off";
+    }
+    return flag.name + ":" + to_string(clamp_percent(flag.rollout_percent)) + "%";
+}

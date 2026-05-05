@@ -1,0 +1,47 @@
+module observability_tools.signals;
+
+struct MetricPoint {
+    name: string,
+    value: i32,
+    unit: string,
+}
+
+struct SpanInfo {
+    trace_id: string,
+    span_id: string,
+    name: string,
+}
+
+fn counter(name: string, value: i32) -> MetricPoint {
+    return MetricPoint { name: name, value: value, unit: "count" };
+}
+
+fn duration_ms(name: string, value: i32) -> MetricPoint {
+    return MetricPoint { name: name, value: value, unit: "ms" };
+}
+
+fn span(trace_id: string, span_id: string, name: string) -> SpanInfo {
+    return SpanInfo { trace_id: trace_id, span_id: span_id, name: name };
+}
+
+fn metric_line(metric: MetricPoint) -> string {
+    return metric.name + "=" + to_string(metric.value) + metric.unit;
+}
+
+fn span_label(span: SpanInfo) -> string {
+    return span.trace_id + "/" + span.span_id + ":" + span.name;
+}
+
+fn latency_band(duration_ms: i32) -> string {
+    if (duration_ms < 100) {
+        return "fast";
+    }
+    if (duration_ms < 500) {
+        return "normal";
+    }
+    if (duration_ms < 1000) {
+        return "slow";
+    }
+    return "critical";
+}
+

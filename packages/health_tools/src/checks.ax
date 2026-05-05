@@ -1,0 +1,54 @@
+module health_tools.checks;
+
+struct HealthCheck {
+    name: string,
+    ok: bool,
+    message: string,
+}
+
+struct HealthSummary {
+    total: i32,
+    failed: i32,
+    status: string,
+}
+
+fn pass(name: string, message: string) -> HealthCheck {
+    return HealthCheck { name: name, ok: true, message: message };
+}
+
+fn fail(name: string, message: string) -> HealthCheck {
+    return HealthCheck { name: name, ok: false, message: message };
+}
+
+fn label(check: HealthCheck) -> string {
+    if (check.ok) {
+        return check.name + ":ok";
+    }
+    return check.name + ":failed:" + check.message;
+}
+
+fn summary(total: i32, failed: i32) -> HealthSummary {
+    let mut status: string = "ok";
+    if (failed > 0) {
+        status = "degraded";
+    }
+    if (failed >= total && total > 0) {
+        status = "down";
+    }
+    return HealthSummary { total: total, failed: failed, status: status };
+}
+
+fn ready(summary: HealthSummary) -> bool {
+    return summary.failed == 0 && summary.total > 0;
+}
+
+fn status_code(summary: HealthSummary) -> i32 {
+    if (ready(summary)) {
+        return 200;
+    }
+    if (summary.status == "degraded") {
+        return 503;
+    }
+    return 500;
+}
+

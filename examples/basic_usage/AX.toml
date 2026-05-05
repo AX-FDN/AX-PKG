@@ -14,7 +14,9 @@ collection_tools = { path = "../../packages/collection_tools" }
 config_rules = { path = "../../packages/config_rules" }
 database_tools = { path = "../../packages/database_tools" }
 encoding_tools = { path = "../../packages/encoding_tools" }
+feature_flag_tools = { path = "../../packages/feature_flag_tools" }
 hash_tools = { path = "../../packages/hash_tools" }
+health_tools = { path = "../../packages/health_tools" }
 json_tools = { path = "../../packages/json_tools" }
 jwt_tools = { path = "../../packages/jwt_tools" }
 log_tools = { path = "../../packages/log_tools" }
@@ -22,8 +24,10 @@ markdown_tools = { path = "../../packages/markdown_tools" }
 math_rules = { path = "../../packages/math_rules" }
 migration_tools = { path = "../../packages/migration_tools" }
 number_tools = { path = "../../packages/number_tools" }
+observability_tools = { path = "../../packages/observability_tools" }
 pagination_tools = { path = "../../packages/pagination_tools" }
 queue_tools = { path = "../../packages/queue_tools" }
+rate_limit_tools = { path = "../../packages/rate_limit_tools" }
 report_tools = { path = "../../packages/report_tools" }
 result_tools = { path = "../../packages/result_tools" }
 retry_tools = { path = "../../packages/retry_tools" }

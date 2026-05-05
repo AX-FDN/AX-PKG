@@ -1,0 +1,6 @@
+manifest_version = 1
+
+[package]
+name = "feature_flag_tools"
+sources = ["src"]
+
