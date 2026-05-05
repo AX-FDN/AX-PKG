@@ -1,0 +1,50 @@
+module pagination_tools.core;
+
+struct PageRequest {
+    page: i32,
+    page_size: i32,
+    offset: i32,
+}
+
+struct PageWindow {
+    offset: i32,
+    limit: i32,
+    has_next: bool,
+}
+
+fn normalize_positive(value: i32, fallback: i32) -> i32 {
+    if (value <= 0) {
+        return fallback;
+    }
+    return value;
+}
+
+fn offset_for(page: i32, page_size: i32) -> i32 {
+    let safe_page: i32 = normalize_positive(page, 1);
+    let safe_size: i32 = normalize_positive(page_size, 20);
+    return (safe_page - 1) * safe_size;
+}
+
+fn request(page: i32, page_size: i32) -> PageRequest {
+    let safe_page: i32 = normalize_positive(page, 1);
+    let safe_size: i32 = normalize_positive(page_size, 20);
+    return PageRequest { page: safe_page, page_size: safe_size, offset: offset_for(safe_page, safe_size) };
+}
+
+fn total_pages(total_items: i32, page_size: i32) -> i32 {
+    let safe_size: i32 = normalize_positive(page_size, 20);
+    if (total_items <= 0) {
+        return 0;
+    }
+    return (total_items + safe_size - 1) / safe_size;
+}
+
+fn window(total_items: i32, page: i32, page_size: i32) -> PageWindow {
+    let req: PageRequest = request(page, page_size);
+    return PageWindow {
+        offset: req.offset,
+        limit: req.page_size,
+        has_next: req.page < total_pages(total_items, req.page_size),
+    };
+}
+

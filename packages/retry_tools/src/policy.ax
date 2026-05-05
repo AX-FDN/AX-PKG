@@ -1,0 +1,48 @@
+module retry_tools.policy;
+
+struct RetryPolicy {
+    max_attempts: i32,
+    base_delay_ms: i32,
+    max_delay_ms: i32,
+}
+
+fn fixed(max_attempts: i32, delay_ms: i32) -> RetryPolicy {
+    return RetryPolicy { max_attempts: max_attempts, base_delay_ms: delay_ms, max_delay_ms: delay_ms };
+}
+
+fn exponential(max_attempts: i32, base_delay_ms: i32, max_delay_ms: i32) -> RetryPolicy {
+    return RetryPolicy { max_attempts: max_attempts, base_delay_ms: base_delay_ms, max_delay_ms: max_delay_ms };
+}
+
+fn retryable_status(status: i32) -> bool {
+    return status == 408 || status == 429 || status == 502 || status == 503 || status == 504 || status >= 500;
+}
+
+fn should_retry_status(status: i32, attempt: i32, policy: RetryPolicy) -> bool {
+    return retryable_status(status) && attempt < policy.max_attempts;
+}
+
+fn delay_for_attempt(attempt: i32, policy: RetryPolicy) -> i32 {
+    let mut delay: i32 = policy.base_delay_ms;
+    for (let mut i: i32 = 1; i < attempt; i = i + 1) {
+        delay = delay * 2;
+        if (delay > policy.max_delay_ms) {
+            return policy.max_delay_ms;
+        }
+    }
+    if (delay > policy.max_delay_ms) {
+        return policy.max_delay_ms;
+    }
+    return delay;
+}
+
+fn action_label(status: i32, attempt: i32, policy: RetryPolicy) -> string {
+    if (status >= 200 && status <= 299) {
+        return "success";
+    }
+    if (should_retry_status(status, attempt, policy)) {
+        return "retry";
+    }
+    return "fail";
+}
+

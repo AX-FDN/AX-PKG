@@ -1,0 +1,46 @@
+module cache_tools.keys;
+
+struct CachePolicy {
+    ttl_seconds: i32,
+    stale_while_revalidate_seconds: i32,
+    enabled: bool,
+}
+
+fn enabled(ttl_seconds: i32) -> CachePolicy {
+    return CachePolicy { ttl_seconds: ttl_seconds, stale_while_revalidate_seconds: 0, enabled: true };
+}
+
+fn with_stale(ttl_seconds: i32, stale_seconds: i32) -> CachePolicy {
+    return CachePolicy { ttl_seconds: ttl_seconds, stale_while_revalidate_seconds: stale_seconds, enabled: true };
+}
+
+fn disabled() -> CachePolicy {
+    return CachePolicy { ttl_seconds: 0, stale_while_revalidate_seconds: 0, enabled: false };
+}
+
+fn key2(namespace: string, first: string, second: string) -> string {
+    return namespace + ":" + first + ":" + second;
+}
+
+fn key3(namespace: string, first: string, second: string, third: string) -> string {
+    return namespace + ":" + first + ":" + second + ":" + third;
+}
+
+fn age_label(age_seconds: i32, policy: CachePolicy) -> string {
+    if (!policy.enabled) {
+        return "disabled";
+    }
+    if (age_seconds <= policy.ttl_seconds) {
+        return "fresh";
+    }
+    if (age_seconds <= policy.ttl_seconds + policy.stale_while_revalidate_seconds) {
+        return "stale";
+    }
+    return "expired";
+}
+
+fn is_usable(age_seconds: i32, policy: CachePolicy) -> bool {
+    let label: string = age_label(age_seconds, policy);
+    return label == "fresh" || label == "stale";
+}
+
