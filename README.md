@@ -12,7 +12,9 @@ packages/
   collection_tools/
   database_tools/
   encoding_tools/
+  hash_tools/
   json_tools/
+  jwt_tools/
   log_tools/
   text_tools/
   config_rules/
@@ -41,7 +43,9 @@ The AX compiler repository stores registry metadata, while this repository store
 | `collection_tools` | `collection_tools.ints` | Integer slice summaries and aggregates |
 | `database_tools` | `database_tools.dsn` | Pure AX DSN classification and database readiness helpers |
 | `encoding_tools` | `encoding_tools.core` | Hex and base64 helpers over `std.bytes` |
+| `hash_tools` | `hash_tools.checksum` | Non-cryptographic deterministic checksum helpers |
 | `json_tools` | `json_tools.encode` | Deterministic JSON string construction helpers |
+| `jwt_tools` | `jwt_tools.preview` | Unsigned JWT shape helpers for package experiments |
 | `log_tools` | `log_tools.core` | Structured log line formatting helpers |
 | `text_tools` | `text_tools.normalize`, `text_tools.stats` | Text normalization and simple text metrics |
 | `config_rules` | `config_rules.validate` | Key-value config validation helpers |

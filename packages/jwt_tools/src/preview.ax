@@ -1,0 +1,57 @@
+module jwt_tools.preview;
+
+import encoding_tools.core;
+import json_tools.encode;
+
+struct JwtPreview {
+    token: string,
+    signing: string,
+    safe_for_auth: bool,
+}
+
+fn header_none() -> string {
+    return json_tools.encode.object2(
+        json_tools.encode.field_string("alg", "none"),
+        json_tools.encode.field_string("typ", "JWT")
+    );
+}
+
+fn payload_subject(subject: string) -> string {
+    return json_tools.encode.object1(json_tools.encode.field_string("sub", subject));
+}
+
+fn payload_subject_scope(subject: string, scope: string) -> string {
+    return json_tools.encode.object2(
+        json_tools.encode.field_string("sub", subject),
+        json_tools.encode.field_string("scope", scope)
+    );
+}
+
+fn unsigned_token(header_json: string, payload_json: string) -> string {
+    return encoding_tools.core.base64_urlsafe_no_pad(header_json) + "." + encoding_tools.core.base64_urlsafe_no_pad(payload_json) + ".";
+}
+
+fn preview_subject(subject: string) -> JwtPreview {
+    return JwtPreview {
+        token: unsigned_token(header_none(), payload_subject(subject)),
+        signing: "none",
+        safe_for_auth: false,
+    };
+}
+
+fn preview_subject_scope(subject: string, scope: string) -> JwtPreview {
+    return JwtPreview {
+        token: unsigned_token(header_none(), payload_subject_scope(subject, scope)),
+        signing: "none",
+        safe_for_auth: false,
+    };
+}
+
+fn looks_like_compact_jwt(token: string) -> bool {
+    return string_contains(token, ".");
+}
+
+fn bearer_preview(token: string) -> string {
+    return "Bearer " + token;
+}
+

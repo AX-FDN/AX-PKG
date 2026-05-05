@@ -20,6 +20,44 @@ fn is_success_status(status: i32) -> bool {
     return status >= 200 && status <= 299;
 }
 
+fn is_retryable_status(status: i32) -> bool {
+    return status == 408 || status == 429 || status == 502 || status == 503 || status == 504 || status >= 500;
+}
+
+fn status_class(status: i32) -> string {
+    if (status >= 200 && status <= 299) {
+        return "success";
+    }
+    if (status >= 300 && status <= 399) {
+        return "redirect";
+    }
+    if (status >= 400 && status <= 499) {
+        return "client-error";
+    }
+    if (status >= 500) {
+        return "server-error";
+    }
+    return "informational";
+}
+
+fn query_pair(key: string, value: string) -> string {
+    return key + "=" + value;
+}
+
+fn append_query(url: string, query: string) -> string {
+    if (string_len(query) == 0) {
+        return url;
+    }
+    if (string_contains(url, "?")) {
+        return url + "&" + query;
+    }
+    return url + "?" + query;
+}
+
+fn request_key(method: string, url: string) -> string {
+    return method + " " + url;
+}
+
 fn status_label(url: string) -> string {
     let response: std.http.HttpResponse = std.http.get(url);
     return std.http.status_text(response);

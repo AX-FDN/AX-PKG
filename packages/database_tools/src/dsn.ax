@@ -6,6 +6,19 @@ struct DsnCheck {
     message: string,
 }
 
+struct DriverCapability {
+    driver: string,
+    network: bool,
+    tls: bool,
+    file_runtime: bool,
+}
+
+struct MigrationPlan {
+    ok: bool,
+    label: string,
+    steps: i32,
+}
+
 fn driver_name(dsn: string) -> string {
     if (string_starts_with(dsn, "postgres://")) {
         return "postgres";
@@ -41,6 +54,23 @@ fn requires_tls_runtime(driver: string) -> bool {
     return driver == "postgres" || driver == "mysql";
 }
 
+fn uses_file_runtime(driver: string) -> bool {
+    return driver == "sqlite";
+}
+
+fn capability(driver: string) -> DriverCapability {
+    return DriverCapability {
+        driver: driver,
+        network: requires_network(driver),
+        tls: requires_tls_runtime(driver),
+        file_runtime: uses_file_runtime(driver),
+    };
+}
+
+fn capability_for_dsn(dsn: string) -> DriverCapability {
+    return capability(driver_name(dsn));
+}
+
 fn check(dsn: string) -> DsnCheck {
     if (string_len(dsn) == 0) {
         return DsnCheck { ok: false, driver: "unknown", message: "dsn must not be empty" };
@@ -53,6 +83,19 @@ fn check(dsn: string) -> DsnCheck {
         return DsnCheck { ok: false, driver: driver, message: "network database dsn should include a host" };
     }
     return DsnCheck { ok: true, driver: driver, message: "ok" };
+}
+
+fn migration_plan(name: string, pending_steps: i32) -> MigrationPlan {
+    if (string_len(string_trim(name)) == 0) {
+        return MigrationPlan { ok: false, label: "migration name is required", steps: pending_steps };
+    }
+    if (pending_steps < 0) {
+        return MigrationPlan { ok: false, label: "pending steps must not be negative", steps: pending_steps };
+    }
+    if (pending_steps == 0) {
+        return MigrationPlan { ok: true, label: name + ": clean", steps: pending_steps };
+    }
+    return MigrationPlan { ok: true, label: name + ": pending", steps: pending_steps };
 }
 
 fn readiness_note(dsn: string) -> string {

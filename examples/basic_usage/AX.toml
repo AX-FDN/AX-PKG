@@ -13,7 +13,9 @@ collection_tools = { path = "../../packages/collection_tools" }
 config_rules = { path = "../../packages/config_rules" }
 database_tools = { path = "../../packages/database_tools" }
 encoding_tools = { path = "../../packages/encoding_tools" }
+hash_tools = { path = "../../packages/hash_tools" }
 json_tools = { path = "../../packages/json_tools" }
+jwt_tools = { path = "../../packages/jwt_tools" }
 log_tools = { path = "../../packages/log_tools" }
 markdown_tools = { path = "../../packages/markdown_tools" }
 math_rules = { path = "../../packages/math_rules" }
