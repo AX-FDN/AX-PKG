@@ -7,6 +7,7 @@ import config_rules.validate;
 import database_tools.dsn;
 import encoding_tools.core;
 import feature_flag_tools.flags;
+import generic_tools.box;
 import hash_tools.checksum;
 import health_tools.checks;
 import json_tools.encode;
@@ -62,6 +63,8 @@ fn main() -> i32 {
     let rate_limit: rate_limit_tools.window.RateLimit = rate_limit_tools.window.create(100, 83, 60);
     let flag: feature_flag_tools.flags.FeatureFlag = feature_flag_tools.flags.flag("new-api", true, 50);
     let health: health_tools.checks.HealthSummary = health_tools.checks.summary(3, 1);
+    let boxed_score: generic_tools.box.Box<i32> = generic_tools.box.wrap(score);
+    let generic_score: i32 = generic_tools.box.unwrap(boxed_score);
     let values: [i32] = [score, summary.headings, summary.nonempty];
     let totals: collection_tools.ints.IntSummary = collection_tools.ints.summarize(values);
     let bounded: number_tools.core.RangeCheck = number_tools.core.range_check(totals.sum, 0, 20);
@@ -96,6 +99,7 @@ fn main() -> i32 {
     report = report_tools.builder.kv_string(report, "rate-limit", rate_limit_tools.window.status(rate_limit));
     report = report_tools.builder.kv_string(report, "flag", feature_flag_tools.flags.decision_label(flag, "user-1"));
     report = report_tools.builder.kv_string(report, "health", health.status);
+    report = report_tools.builder.kv_i32(report, "generic-score", generic_score);
     report = report_tools.builder.kv_string(report, "name", validation_tools.rules.message(name_status, "name"));
     println(labeled);
     println("score=" + to_string(score));

@@ -15,6 +15,7 @@ config_rules = { path = "../../packages/config_rules" }
 database_tools = { path = "../../packages/database_tools" }
 encoding_tools = { path = "../../packages/encoding_tools" }
 feature_flag_tools = { path = "../../packages/feature_flag_tools" }
+generic_tools = { path = "../../packages/generic_tools" }
 hash_tools = { path = "../../packages/hash_tools" }
 health_tools = { path = "../../packages/health_tools" }
 json_tools = { path = "../../packages/json_tools" }

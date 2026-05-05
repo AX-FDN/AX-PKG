@@ -14,6 +14,7 @@ packages/
   database_tools/
   encoding_tools/
   feature_flag_tools/
+  generic_tools/
   hash_tools/
   health_tools/
   json_tools/
@@ -53,6 +54,7 @@ The AX compiler repository stores registry metadata, while this repository store
 | `database_tools` | `database_tools.dsn` | Pure AX DSN classification and database readiness helpers |
 | `encoding_tools` | `encoding_tools.core` | Hex and base64 helpers over `std.bytes` |
 | `feature_flag_tools` | `feature_flag_tools.flags` | Feature flag rollout and decision helpers |
+| `generic_tools` | `generic_tools.box` | Generic box helpers used by package-backed AOT validation |
 | `hash_tools` | `hash_tools.checksum` | Non-cryptographic deterministic checksum helpers |
 | `health_tools` | `health_tools.checks` | Service readiness and dependency health helpers |
 | `json_tools` | `json_tools.encode` | Deterministic JSON string construction helpers |

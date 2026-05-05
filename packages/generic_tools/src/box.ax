@@ -1,0 +1,19 @@
+module generic_tools.box;
+
+struct Box<T> {
+    value: T,
+}
+
+impl<T> Box<T> {
+    fn get(self: Box<T>) -> T {
+        return self.value;
+    }
+}
+
+fn wrap<T>(value: T) -> Box<T> {
+    return Box { value: value };
+}
+
+fn unwrap<T>(box: Box<T>) -> T {
+    return box.get();
+}
