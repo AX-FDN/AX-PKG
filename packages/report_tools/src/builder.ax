@@ -1,0 +1,31 @@
+module report_tools.builder;
+
+fn line(report: string, value: string) -> string {
+    return report + value + "\n";
+}
+
+fn section(report: string, title: string) -> string {
+    return line(report, "== " + title + " ==");
+}
+
+fn kv_string(report: string, key: string, value: string) -> string {
+    return line(report, key + ": " + value);
+}
+
+fn kv_i32(report: string, key: string, value: i32) -> string {
+    return kv_string(report, key, to_string(value));
+}
+
+fn kv_bool(report: string, key: string, value: bool) -> string {
+    if (value) {
+        return kv_string(report, key, "true");
+    }
+    return kv_string(report, key, "false");
+}
+
+fn status(report: string, ok: bool, message: string) -> string {
+    if (ok) {
+        return line(report, "ok: " + message);
+    }
+    return line(report, "error: " + message);
+}

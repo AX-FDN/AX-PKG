@@ -1,0 +1,44 @@
+module validation_tools.rules;
+
+fn ok() -> i32 {
+    return 0;
+}
+
+fn failed() -> i32 {
+    return 1;
+}
+
+fn require_non_empty(value: string) -> i32 {
+    if (string_len(string_trim(value)) == 0) {
+        return failed();
+    }
+    return ok();
+}
+
+fn require_min_length(value: string, minimum: i32) -> i32 {
+    if (string_len(value) < minimum) {
+        return failed();
+    }
+    return ok();
+}
+
+fn require_contains(value: string, needle: string) -> i32 {
+    if (string_contains(value, needle)) {
+        return ok();
+    }
+    return failed();
+}
+
+fn require_prefix(value: string, prefix: string) -> i32 {
+    if (string_starts_with(value, prefix)) {
+        return ok();
+    }
+    return failed();
+}
+
+fn message(code: i32, label: string) -> string {
+    if (code == 0) {
+        return label + ": ok";
+    }
+    return label + ": failed";
+}

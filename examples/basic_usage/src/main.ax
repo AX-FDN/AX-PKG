@@ -1,8 +1,13 @@
+import collection_tools.ints;
 import config_rules.validate;
+import markdown_tools.headings;
 import math_rules.core;
+import number_tools.core;
+import report_tools.builder;
 import result_tools.summary;
 import text_tools.normalize;
 import text_tools.stats;
+import validation_tools.rules;
 
 fn main() -> i32 {
     let normalized: string = text_tools.normalize.normalize_document("# Title\n\n\tbody");
@@ -11,7 +16,21 @@ fn main() -> i32 {
     let config_status: i32 = config_rules.validate.validate("host=localhost\nport=8080\n");
     let message: string = config_rules.validate.validation_message("host=localhost\nport=8080\n");
     let labeled: string = result_tools.summary.status_label(config_status, message);
+    let values: [i32] = [score, summary.headings, summary.nonempty];
+    let totals: collection_tools.ints.IntSummary = collection_tools.ints.summarize(values);
+    let bounded: number_tools.core.RangeCheck = number_tools.core.range_check(totals.sum, 0, 20);
+    let headings: markdown_tools.headings.HeadingSummary = markdown_tools.headings.summarize(normalized);
+    let name_status: i32 = validation_tools.rules.require_prefix("AX-PKG", "AX");
+    let mut report: string = "";
+    report = report_tools.builder.section(report, "package preview");
+    report = report_tools.builder.kv_i32(report, "score", score);
+    report = report_tools.builder.kv_i32(report, "sum", totals.sum);
+    report = report_tools.builder.kv_string(report, "band", number_tools.core.score_band(score));
+    report = report_tools.builder.kv_bool(report, "range-ok", bounded.ok);
+    report = report_tools.builder.kv_i32(report, "headings", headings.headings);
+    report = report_tools.builder.kv_string(report, "name", validation_tools.rules.message(name_status, "name"));
     println(labeled);
     println("score=" + to_string(score));
+    println(report);
     return result_tools.summary.exit_code(config_status);
 }

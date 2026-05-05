@@ -1,0 +1,67 @@
+module number_tools.core;
+
+struct RangeCheck {
+    ok: bool,
+    clamped: i32,
+    distance: i32,
+}
+
+fn abs_i32(value: i32) -> i32 {
+    if (value < 0) {
+        return 0 - value;
+    }
+    return value;
+}
+
+fn min_i32(left: i32, right: i32) -> i32 {
+    if (left < right) {
+        return left;
+    }
+    return right;
+}
+
+fn max_i32(left: i32, right: i32) -> i32 {
+    if (left > right) {
+        return left;
+    }
+    return right;
+}
+
+fn clamp_i32(value: i32, minimum: i32, maximum: i32) -> i32 {
+    if (value < minimum) {
+        return minimum;
+    }
+    if (value > maximum) {
+        return maximum;
+    }
+    return value;
+}
+
+fn percent_floor(part: i32, total: i32) -> i32 {
+    if (total == 0) {
+        return 0;
+    }
+    return (part * 100) / total;
+}
+
+fn range_check(value: i32, minimum: i32, maximum: i32) -> RangeCheck {
+    let clamped: i32 = clamp_i32(value, minimum, maximum);
+    return RangeCheck {
+        ok: value == clamped,
+        clamped: clamped,
+        distance: abs_i32(value - clamped),
+    };
+}
+
+fn score_band(score: i32) -> string {
+    if (score >= 9) {
+        return "excellent";
+    }
+    if (score >= 7) {
+        return "good";
+    }
+    if (score >= 5) {
+        return "needs-work";
+    }
+    return "blocked";
+}

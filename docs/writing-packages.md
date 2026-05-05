@@ -105,3 +105,38 @@ axc pkg hash packages\your_package
 - Prefer pure AX code first; host/runtime-heavy packages such as HTTP should wait until the runtime ABI is ready.
 - Add an example project when adding a new package.
 
+## Recommended First Package Types
+
+For AX 0.2 Package Preview, prefer packages that can be validated by `axc check` and `axc run` without host-specific setup:
+
+- Text helpers.
+- Validation helpers.
+- Number and scoring helpers.
+- Report builders.
+- Markdown/document inspectors.
+- Small collection helpers.
+
+Avoid package types that need native runtime or network support until the compiler/runtime boundary is ready:
+
+- HTTP clients.
+- Database drivers.
+- Native extensions.
+- Packages that shell out to external tools.
+- Packages that depend on private local files.
+
+## Adding A Package To This Repository
+
+1. Add `packages/<name>/AX.toml`.
+2. Put source files under `packages/<name>/src`.
+3. Add a short `packages/<name>/README.md`.
+4. Add the package to `examples/basic_usage/AX.toml`.
+5. Import at least one module from the package in `examples/basic_usage/src/main.ax`.
+6. Run:
+
+```powershell
+axc check examples\basic_usage
+axc run examples\basic_usage
+axc pkg hash packages\<name>
+```
+
+After the package source is committed, the AX compiler repository registry can point to that commit, package path, module list, and checksum.

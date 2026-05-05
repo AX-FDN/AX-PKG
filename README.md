@@ -6,10 +6,15 @@ This repository is a package monorepo. Each package lives under `packages/<name>
 
 ```text
 packages/
+  collection_tools/
   text_tools/
   config_rules/
   math_rules/
+  number_tools/
+  markdown_tools/
+  report_tools/
   result_tools/
+  validation_tools/
 ```
 
 The AX compiler repository stores registry metadata, while this repository stores package source.
@@ -18,10 +23,15 @@ The AX compiler repository stores registry metadata, while this repository store
 
 | Package | Modules | Purpose |
 | --- | --- | --- |
+| `collection_tools` | `collection_tools.ints` | Integer slice summaries and aggregates |
 | `text_tools` | `text_tools.normalize`, `text_tools.stats` | Text normalization and simple text metrics |
 | `config_rules` | `config_rules.validate` | Key-value config validation helpers |
 | `math_rules` | `math_rules.core` | Small integer scoring helpers |
+| `number_tools` | `number_tools.core` | Integer clamps, percentages, and range checks |
+| `markdown_tools` | `markdown_tools.headings` | Markdown heading inspection helpers |
+| `report_tools` | `report_tools.builder` | Plain-text report construction helpers |
 | `result_tools` | `result_tools.summary` | Helpers around `std.result.Result<i32, string>` |
+| `validation_tools` | `validation_tools.rules` | Reusable validation predicates and status messages |
 
 ## Validate Locally
 
@@ -38,7 +48,8 @@ To compute a registry checksum for a package:
 D:\CargoTarget\AX\debug\axc.exe pkg hash ..\AX-PKG\packages\text_tools
 ```
 
+To validate every package shape quickly, run the example project. It imports the preview packages through local path dependencies so package authors can test changes before registry metadata is updated.
+
 ## Writing Packages
 
 See [docs/writing-packages.md](docs/writing-packages.md).
-
