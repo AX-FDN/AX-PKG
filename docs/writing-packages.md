@@ -120,6 +120,10 @@ For AX 0.2 Package Preview, prefer packages that can be validated by `axc check`
 - Markdown/document inspectors.
 - Small collection helpers.
 - Pure database connection-string and readiness helpers.
+- JSON encoders and deterministic payload builders.
+- URL/query helpers.
+- Log formatting helpers.
+- Authentication header helpers that do not implement cryptography.
 
 Host-boundary preview packages are now acceptable when they wrap explicit
 standard-library host APIs:
@@ -128,6 +132,10 @@ standard-library host APIs:
 - One-shot TCP helpers over `std.net`.
 - Database protocol helpers that stay pure AX until TCP/TLS/byte buffers are
   ready.
+
+Do not implement crypto, JWT signing, compression, binary protocols, TLS, or
+native database drivers as string-only packages. Those need byte buffers,
+runtime/native ABI work, or dedicated audited primitives first.
 
 HTTP and raw TCP preview packages can now wrap `std.http` and `std.net`, but
 they are interpreter-first packages until native runtime ABI support exists.

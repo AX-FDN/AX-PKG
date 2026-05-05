@@ -1,0 +1,50 @@
+module log_tools.core;
+
+struct LogEntry {
+    level: string,
+    target: string,
+    message: string,
+    line: string,
+}
+
+fn level_label(level: i32) -> string {
+    if (level <= 0) {
+        return "debug";
+    }
+    if (level == 1) {
+        return "info";
+    }
+    if (level == 2) {
+        return "warn";
+    }
+    return "error";
+}
+
+fn is_error_level(level: i32) -> bool {
+    return level >= 3;
+}
+
+fn format_line(level: i32, target: string, message: string) -> string {
+    return "[" + level_label(level) + "] " + target + ": " + message;
+}
+
+fn entry(level: i32, target: string, message: string) -> LogEntry {
+    return LogEntry {
+        level: level_label(level),
+        target: target,
+        message: message,
+        line: format_line(level, target, message),
+    };
+}
+
+fn info(target: string, message: string) -> string {
+    return format_line(1, target, message);
+}
+
+fn warn(target: string, message: string) -> string {
+    return format_line(2, target, message);
+}
+
+fn error(target: string, message: string) -> string {
+    return format_line(3, target, message);
+}

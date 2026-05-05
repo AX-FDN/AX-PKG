@@ -1,6 +1,9 @@
+import auth_tools.headers;
 import collection_tools.ints;
 import config_rules.validate;
 import database_tools.dsn;
+import json_tools.encode;
+import log_tools.core;
 import markdown_tools.headings;
 import math_rules.core;
 import number_tools.core;
@@ -8,6 +11,7 @@ import report_tools.builder;
 import result_tools.summary;
 import text_tools.normalize;
 import text_tools.stats;
+import url_tools.core;
 import validation_tools.rules;
 
 fn main() -> i32 {
@@ -17,6 +21,14 @@ fn main() -> i32 {
     let config_status: i32 = config_rules.validate.validate("host=localhost\nport=8080\n");
     let message: string = config_rules.validate.validation_message("host=localhost\nport=8080\n");
     let dsn_status: database_tools.dsn.DsnCheck = database_tools.dsn.check("postgres://db.example/app");
+    let url_status: url_tools.core.UrlSummary = url_tools.core.summarize("https://api.example/v1");
+    let json: string = json_tools.encode.object3(
+        json_tools.encode.field_string("service", "ax-pkg"),
+        json_tools.encode.field_i32("score", score),
+        json_tools.encode.field_bool("secure", url_status.secure)
+    );
+    let log_line: string = log_tools.core.info("package-preview", "registry packages loaded");
+    let auth_preview: string = auth_tools.headers.safe_header_preview("Authorization", "secret-token");
     let labeled: string = result_tools.summary.status_label(config_status, message);
     let values: [i32] = [score, summary.headings, summary.nonempty];
     let totals: collection_tools.ints.IntSummary = collection_tools.ints.summarize(values);
@@ -31,6 +43,10 @@ fn main() -> i32 {
     report = report_tools.builder.kv_bool(report, "range-ok", bounded.ok);
     report = report_tools.builder.kv_i32(report, "headings", headings.headings);
     report = report_tools.builder.kv_string(report, "db", dsn_status.driver);
+    report = report_tools.builder.kv_string(report, "url", url_status.scheme);
+    report = report_tools.builder.kv_string(report, "json", json);
+    report = report_tools.builder.kv_string(report, "log", log_line);
+    report = report_tools.builder.kv_string(report, "auth", auth_preview);
     report = report_tools.builder.kv_string(report, "name", validation_tools.rules.message(name_status, "name"));
     println(labeled);
     println("score=" + to_string(score));

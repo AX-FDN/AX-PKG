@@ -1,0 +1,28 @@
+module auth_tools.headers;
+
+fn bearer_value(token: string) -> string {
+    return "Bearer " + token;
+}
+
+fn bearer_header(token: string) -> string {
+    return "Authorization: " + bearer_value(token);
+}
+
+fn api_key_header(name: string, key: string) -> string {
+    return name + ": " + key;
+}
+
+fn has_bearer_prefix(value: string) -> bool {
+    return string_starts_with(value, "Bearer ");
+}
+
+fn redact_secret(secret: string) -> string {
+    if (string_len(secret) == 0) {
+        return "<empty>";
+    }
+    return "<redacted:" + to_string(string_len(secret)) + ">";
+}
+
+fn safe_header_preview(name: string, secret: string) -> string {
+    return name + ": " + redact_secret(secret);
+}
